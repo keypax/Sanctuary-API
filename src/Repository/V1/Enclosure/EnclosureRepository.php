@@ -6,7 +6,7 @@ use App\DTO\V1\EnclosureDTO;
 use App\Repository\V1\Enclosure\Exception\EnclosureNotFoundRepositoryException;
 use Doctrine\DBAL\Connection;
 
-class EnclosureRepository implements EnclosureRepositoryInterface
+readonly class EnclosureRepository implements EnclosureRepositoryInterface
 {
     public function __construct(readonly Connection $connection) {}
 

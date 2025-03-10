@@ -5,7 +5,7 @@ namespace App\Repository\V1\Animal;
 use App\DTO\V1\AnimalDTO;
 use Doctrine\DBAL\Connection;
 
-class AnimalRepository implements AnimalRepositoryInterface
+readonly class AnimalRepository implements AnimalRepositoryInterface
 {
     public function __construct(readonly Connection $connection) {}
 
