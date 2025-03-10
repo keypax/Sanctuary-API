@@ -2,11 +2,10 @@
 
 namespace App\Controller\V1\Animal;
 
-use App\Repository\V1\AnimalRepositoryInterface;
+use App\Repository\V1\Animal\AnimalRepositoryInterface;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/v1/animals', name: 'v1_animals_')]

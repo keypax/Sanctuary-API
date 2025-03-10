@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace App\Repository\V1;
+namespace App\Repository\V1\Enclosure;
 
 use App\DTO\V1\EnclosureDTO;
+use App\Repository\V1\Enclosure\Exception\EnclosureNotFoundRepositoryException;
 use Doctrine\DBAL\Connection;
 
 class EnclosureRepository implements EnclosureRepositoryInterface
@@ -25,5 +26,24 @@ class EnclosureRepository implements EnclosureRepositoryInterface
         }
 
         return $dtos;
+    }
+
+    public function getById(int $id): EnclosureDTO
+    {
+        $sql = '
+            SELECT * FROM enclosure
+            WHERE id = :id
+            LIMIT 1
+        ';
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue('id', $id);
+        $result = $stmt->executeQuery()->fetchAllAssociative();
+
+        if (empty($result)) {
+            throw new EnclosureNotFoundRepositoryException();
+        }
+
+        return EnclosureDTO::createFromArray($result[0]);
     }
 }

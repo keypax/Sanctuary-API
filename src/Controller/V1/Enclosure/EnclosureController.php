@@ -2,9 +2,9 @@
 
 namespace App\Controller\V1\Enclosure;
 
-use App\Repository\V1\AnimalRepositoryInterface;
-use App\Repository\V1\EnclosureRepository;
-use App\Repository\V1\EnclosureRepositoryInterface;
+use App\Repository\V1\Animal\AnimalRepositoryInterface;
+use App\Repository\V1\Enclosure\EnclosureRepositoryInterface;
+use App\Repository\V1\Enclosure\Exception\EnclosureNotFoundRepositoryException;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,6 +23,21 @@ class EnclosureController extends AbstractController
     public function index(): JsonResponse {
         $jsonContent = $this->serializer->serialize(
             $this->enclosureRepository->getAll(), 'json'
+        );
+
+        return new JsonResponse($jsonContent, 200, [], true);
+    }
+
+    #[Route('/{enclosureId}/animals', name: 'animals', methods: ['GET'])]
+    public function animals(int $enclosureId): JsonResponse {
+        try {
+            $this->enclosureRepository->getById($enclosureId);
+        } catch (EnclosureNotFoundRepositoryException) {
+            return new JsonResponse('Enclosure not found', 404);
+        }
+
+        $jsonContent = $this->serializer->serialize(
+            $this->animalRepository->findByEnclosureId($enclosureId), 'json'
         );
 
         return new JsonResponse($jsonContent, 200, [], true);
