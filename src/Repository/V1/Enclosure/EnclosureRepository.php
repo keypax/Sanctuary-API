@@ -44,6 +44,6 @@ readonly class EnclosureRepository implements EnclosureRepositoryInterface
             throw new EnclosureNotFoundRepositoryException();
         }
 
-        return EnclosureDTO::createFromArray($result[0]);
+        return EnclosureDTO::createFromArray($result);
     }
 }
