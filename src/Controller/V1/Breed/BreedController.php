@@ -21,22 +21,7 @@ class BreedController extends AbstractController
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(): JsonResponse {
         $jsonContent = $this->serializer->serialize(
-            $this->enclosureRepository->getAll(), 'json'
-        );
-
-        return new JsonResponse($jsonContent, 200, [], true);
-    }
-
-    #[Route('/{enclosureId}/animals', name: 'animals', methods: ['GET'])]
-    public function animals(int $enclosureId): JsonResponse {
-        try {
-            $this->enclosureRepository->getById($enclosureId);
-        } catch (EnclosureNotFoundRepositoryException) {
-            return new JsonResponse('Enclosure not found', 404);
-        }
-
-        $jsonContent = $this->serializer->serialize(
-            $this->animalRepository->findByEnclosureId($enclosureId), 'json'
+            $this->breedRepository->getAll(), 'json'
         );
 
         return new JsonResponse($jsonContent, 200, [], true);
