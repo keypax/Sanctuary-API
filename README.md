@@ -1,3 +1,6 @@
+# Sanctuary API
+Sanctuary API is the API component that complements the main Sanctuary system. It serves as the interface for managing the animal shelter operations by exposing endpoints to perform queries on the underlying data. Designed to work together with Sanctuary, the API ensures proper data replication and isolation, prioritizing the safety and performance of the core system. Work in progress.
+
 # Sanctuary
 
 Sanctuary is an animal management system designed for use in animal shelters. Although it is currently in development, the project is intended to be available pro bono for the public good.
