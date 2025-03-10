@@ -4,9 +4,9 @@ namespace App\DTO\V1;
 
 final readonly class AnimalDTO
 {
-    private ?int $animalId;
-    private ?string $animalInternalId;
-    private ?string $animalName;
+    private ?int $id;
+    private ?string $internalId;
+    private ?string $name;
     private ?string $species;
     private ?string $breed;
     private ?int $gender;
@@ -24,9 +24,9 @@ final readonly class AnimalDTO
     private ?array $photos;
 
     public function __construct(
-        ?int $animalId,
-        ?string $animalInternalId,
-        ?string $animalName,
+        ?int $id,
+        ?string $internalId,
+        ?string $name,
         ?string $species,
         ?string $breed,
         ?int $gender,
@@ -41,9 +41,9 @@ final readonly class AnimalDTO
         \DateTime $updatedAt,
         array $photos = []
     ) {
-        $this->animalId = $animalId;
-        $this->animalInternalId = $animalInternalId;
-        $this->animalName = $animalName;
+        $this->id = $id;
+        $this->internalId = $internalId;
+        $this->name = $name;
         $this->species = $species;
         $this->breed = $breed;
         $this->gender = $gender;
@@ -62,9 +62,9 @@ final readonly class AnimalDTO
     public static function createFromArray(array $data, array $photos = []): self
     {
         return new self(
-            animalId: $data['animal_id'],
-            animalInternalId: $data['animal_internal_id'],
-            animalName: $data['animal_name'],
+            id: $data['animal_id'],
+            internalId: $data['animal_internal_id'],
+            name: $data['animal_name'],
             species: $data['animal_species'],
             breed: $data['animal_breed'],
             gender: $data['animal_gender'],
