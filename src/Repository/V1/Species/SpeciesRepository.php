@@ -3,11 +3,12 @@
 namespace App\Repository\V1\Species;
 
 use App\DTO\V1\SpeciesDTO;
+use App\Repository\V1\Species\Exception\SpeciesNotFoundRepositoryException;
 use Doctrine\DBAL\Connection;
 
 readonly class SpeciesRepository implements SpeciesRepositoryInterface
 {
-    public function __construct(readonly Connection $connection) {}
+    public function __construct(private Connection $connection) {}
 
     public function getAll(): array
     {
@@ -25,5 +26,23 @@ readonly class SpeciesRepository implements SpeciesRepositoryInterface
         }
 
         return $dtos;
+    }
+
+    public function getById(int $id): SpeciesDTO
+    {
+        $sql = '
+            SELECT * FROM animal_species
+            WHERE id = :id
+        ';
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue('id', $id);
+        $result = $stmt->executeQuery()->fetchAssociative();
+
+        if ($result === false) {
+            throw new SpeciesNotFoundRepositoryException();
+        }
+
+        return SpeciesDTO::createFromArray($result);
     }
 }

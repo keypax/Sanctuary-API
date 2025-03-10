@@ -8,7 +8,7 @@ use Doctrine\DBAL\Connection;
 
 readonly class EnclosureRepository implements EnclosureRepositoryInterface
 {
-    public function __construct(readonly Connection $connection) {}
+    public function __construct(private Connection $connection) {}
 
     public function getAll(): array
     {
@@ -38,9 +38,9 @@ readonly class EnclosureRepository implements EnclosureRepositoryInterface
 
         $stmt = $this->connection->prepare($sql);
         $stmt->bindValue('id', $id);
-        $result = $stmt->executeQuery()->fetchAllAssociative();
+        $result = $stmt->executeQuery()->fetchAssociative();
 
-        if (empty($result)) {
+        if ($result === false) {
             throw new EnclosureNotFoundRepositoryException();
         }
 

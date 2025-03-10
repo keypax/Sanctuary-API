@@ -8,4 +8,6 @@ interface BreedRepositoryInterface
 {
     /** @return BreedDTO[] */
     public function getAll(): array;
+    /** @return BreedDTO[] */
+    public function findBySpeciesId(int $speciesId): array;
 }

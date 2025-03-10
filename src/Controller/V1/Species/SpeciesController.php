@@ -3,8 +3,8 @@
 namespace App\Controller\V1\Species;
 
 use App\Repository\V1\Animal\AnimalRepositoryInterface;
-use App\Repository\V1\Enclosure\EnclosureRepositoryInterface;
-use App\Repository\V1\Enclosure\Exception\EnclosureNotFoundRepositoryException;
+use App\Repository\V1\Breed\BreedRepositoryInterface;
+use App\Repository\V1\Species\Exception\SpeciesNotFoundRepositoryException;
 use App\Repository\V1\Species\SpeciesRepositoryInterface;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,6 +16,8 @@ class SpeciesController extends AbstractController
 {
     public function __construct(
         private SpeciesRepositoryInterface $speciesRepository,
+        private AnimalRepositoryInterface $animalRepository,
+        private BreedRepositoryInterface $breedRepository,
         private SerializerInterface $serializer
     ) {}
 
@@ -28,16 +30,16 @@ class SpeciesController extends AbstractController
         return new JsonResponse($jsonContent, 200, [], true);
     }
 
-    #[Route('/{enclosureId}/animals', name: 'animals', methods: ['GET'])]
-    public function animals(int $enclosureId): JsonResponse {
+    #[Route('/{speciesId}/breeds', name: 'breeds', methods: ['GET'])]
+    public function animals(int $speciesId): JsonResponse {
         try {
-            $this->enclosureRepository->getById($enclosureId);
-        } catch (EnclosureNotFoundRepositoryException) {
-            return new JsonResponse('Enclosure not found', 404);
+            $this->speciesRepository->getById($speciesId);
+        } catch (SpeciesNotFoundRepositoryException) {
+            return new JsonResponse('Species not found', 404);
         }
 
         $jsonContent = $this->serializer->serialize(
-            $this->animalRepository->findByEnclosureId($enclosureId), 'json'
+            $this->breedRepository->findBySpeciesId($speciesId), 'json'
         );
 
         return new JsonResponse($jsonContent, 200, [], true);
