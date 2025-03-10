@@ -30,7 +30,18 @@ services:
       - database_api_data:/var/lib/postgresql/data:rw
     networks:
       - sanctuary_network
-###< doctrine/doctrine-bundle ###
+    ###< doctrine/doctrine-bundle ###
+
+  nginx:
+    image: nginx:1.15.8-alpine
+    ports:
+      - 127.0.0.1:${NGINX_PORT}:80
+    volumes:
+      - .:/app:cached
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro,cached
+    container_name: sanctuary_nginx_api
+    networks:
+      - sanctuary_network
 volumes:
   database_api_data:
 
