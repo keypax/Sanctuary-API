@@ -8,7 +8,6 @@ use App\Repository\V1\Breed\BreedRepositoryInterface;
 use App\Repository\V1\Species\Exception\SpeciesNotFoundRepositoryException;
 use App\Repository\V1\Species\SpeciesRepositoryInterface;
 use JMS\Serializer\SerializerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 

@@ -54,6 +54,26 @@ readonly class AnimalRepository implements AnimalRepositoryInterface
         return $this->mapResultsToDTOs($results);
     }
 
+    public function findByBreedId(int $breedId)
+    {
+        //todo: remove second query #FUTRZAK-97
+        $sql = '
+            SELECT * FROM animal
+            WHERE breed = (
+                SELECT breed_name 
+                FROM animal_breed 
+                WHERE id = :breedId
+                LIMIT 1
+            )
+        ';
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue('breedId', $breedId);
+        $results = $stmt->executeQuery()->fetchAllAssociative();
+
+        return $this->mapResultsToDTOs($results);
+    }
+
     private function mapResultsToDTOs(array $results): array
     {
         $dtos = [];

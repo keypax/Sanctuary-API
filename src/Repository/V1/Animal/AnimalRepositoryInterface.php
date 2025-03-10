@@ -12,4 +12,6 @@ interface AnimalRepositoryInterface
     public function findByEnclosureId(int $enclosureId): array;
     /** @return AnimalDTO[] */
     public function findBySpeciesId(int $speciesId);
+    /** @return AnimalDTO[] */
+    public function findByBreedId(int $breedId);
 }

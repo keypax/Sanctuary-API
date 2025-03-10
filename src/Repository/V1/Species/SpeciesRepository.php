@@ -33,6 +33,7 @@ readonly class SpeciesRepository implements SpeciesRepositoryInterface
         $sql = '
             SELECT * FROM animal_species
             WHERE id = :id
+            LIMIT 1
         ';
 
         $stmt = $this->connection->prepare($sql);

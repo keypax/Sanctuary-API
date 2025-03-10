@@ -3,6 +3,7 @@
 namespace App\Repository\V1\Breed;
 
 use App\DTO\V1\BreedDTO;
+use App\Repository\V1\Breed\Exception\BreedNotFoundRepositoryException;
 use Doctrine\DBAL\Connection;
 
 readonly class BreedRepository implements BreedRepositoryInterface
@@ -20,6 +21,25 @@ readonly class BreedRepository implements BreedRepositoryInterface
         $results = $stmt->executeQuery()->fetchAllAssociative();
 
         return $this->mapResultsToDTOs($results);
+    }
+
+    public function getById(int $id): BreedDTO
+    {
+        $sql = '
+            SELECT * FROM animal_breed
+            WHERE id = :id
+            LIMIT 1
+        ';
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindValue('id', $id);
+        $result = $stmt->executeQuery()->fetchAssociative();
+
+        if ($result === false) {
+            throw new BreedNotFoundRepositoryException();
+        }
+
+        return BreedDTO::createFromArray($result);
     }
 
     public function findBySpeciesId(int $speciesId): array

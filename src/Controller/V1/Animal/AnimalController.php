@@ -5,7 +5,6 @@ namespace App\Controller\V1\Animal;
 use App\Controller\V1\ApiAbstractController;
 use App\Repository\V1\Animal\AnimalRepositoryInterface;
 use JMS\Serializer\SerializerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 

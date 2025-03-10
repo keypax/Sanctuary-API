@@ -7,7 +7,6 @@ use App\Repository\V1\Animal\AnimalRepositoryInterface;
 use App\Repository\V1\Enclosure\EnclosureRepositoryInterface;
 use App\Repository\V1\Enclosure\Exception\EnclosureNotFoundRepositoryException;
 use JMS\Serializer\SerializerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
