@@ -29,4 +29,4 @@ create-subscription:
 	docker-compose exec database_api sh -c "PGPASSWORD=pass psql -U postgres -h database_api -d sanctuary -c \"CREATE SUBSCRIPTION sanctuary_subscription_api CONNECTION 'host=database port=5432 dbname=sanctuary user=postgres password=pass' PUBLICATION sanctuary_publication_api WITH (copy_data = true);\""
 
 drop-subscription:
-	docker-compose exec database_api psql -U postgres -h database -d sanctuary -c \"DROP SUBSCRIPTION IF EXISTS sanctuary_subscription_api;\"
+	docker-compose exec database_api sh -c "PGPASSWORD=pass psql -U postgres -h database_api -d sanctuary -c \"DROP SUBSCRIPTION sanctuary_subscription_api;\""
