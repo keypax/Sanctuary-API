@@ -1,21 +1,13 @@
-<?php declare(strict_types=1);
+<?php  /** @noinspection PhpPropertyOnlyWrittenInspection */
+declare(strict_types=1);
 
 namespace App\DTO\V1;
 
 final readonly class EnclosureDTO
-{
-    private ?int $id;
-    private ?string $name;
-
-    public function __construct(
-        ?int $id,
-        ?string $name,
-
-    ) {
-        $this->id = $id;
-        $this->name = $name;
-
-    }
+{    public function __construct(
+        private int $id,
+        private string $name,
+    ) {}
 
     public static function createFromArray(array $data): self
     {
