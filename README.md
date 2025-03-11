@@ -48,6 +48,6 @@ Once the setup is complete, visit: [http://localhost:8100/api/doc](http://localh
 | Basic, automatic API documentation           | Done   |
 | Rate Limiter                                 | Todo   |
 | Pagination, filtering, sorting               | Todo   |
-| Caching                                      | Todo   |
+| Caching                                      | Done   |
 | Optional authorization for external entities | Todo   |
 | Advanced, automatic API documentation        | Todo   |
