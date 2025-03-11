@@ -22,14 +22,47 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Repository\V1\Animal\AnimalRepositoryInterface: '@App\Repository\V1\Animal\AnimalRepository'
+    App\Repository\V1\Breed\BreedRepositoryInterface: '@App\Repository\V1\Breed\BreedRepository'
+    App\Repository\V1\Enclosure\EnclosureRepositoryInterface: '@App\Repository\V1\Enclosure\EnclosureRepository'
+    App\Repository\V1\Species\SpeciesRepositoryInterface: '@App\Repository\V1\Species\SpeciesRepository'
+
     App\Repository\V1\Animal\AnimalRepository:
         arguments:
             $connection: '@doctrine.dbal.default_connection'
 
-    App\Repository\V1\Animal\AnimalRepositoryInterface: '@App\Repository\V1\Animal\AnimalRepository'
+    App\Repository\V1\Breed\BreedRepository:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    App\Repository\V1\Enclosure\EnclosureRepository:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
+
+    App\Repository\V1\Species\SpeciesRepository:
+        arguments:
+            $connection: '@doctrine.dbal.default_connection'
 
     App\Repository\V1\Animal\CachedAnimalRepositoryDecorator:
         decorates: App\Repository\V1\Animal\AnimalRepositoryInterface
         arguments:
             $decoratedRepository: '@App\Repository\V1\Animal\CachedAnimalRepositoryDecorator.inner'
+            $cache: '@cache.app'
+
+    App\Repository\V1\Breed\CachedBreedRepositoryDecorator:
+        decorates: App\Repository\V1\Breed\BreedRepositoryInterface
+        arguments:
+            $decoratedRepository: '@App\Repository\V1\Breed\CachedBreedRepositoryDecorator.inner'
+            $cache: '@cache.app'
+
+    App\Repository\V1\Enclosure\CachedEnclosureRepositoryDecorator:
+        decorates: App\Repository\V1\Enclosure\EnclosureRepositoryInterface
+        arguments:
+            $decoratedRepository: '@App\Repository\V1\Enclosure\CachedEnclosureRepositoryDecorator.inner'
+            $cache: '@cache.app'
+
+    App\Repository\V1\Species\CachedSpeciesRepositoryDecorator:
+        decorates: App\Repository\V1\Species\SpeciesRepositoryInterface
+        arguments:
+            $decoratedRepository: '@App\Repository\V1\Species\CachedSpeciesRepositoryDecorator.inner'
             $cache: '@cache.app'
