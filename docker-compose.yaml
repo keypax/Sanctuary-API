@@ -11,27 +11,6 @@ services:
       DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?serverVersion=17.2&charset=utf8"
     networks:
       - sanctuary_network
-
-  ###> doctrine/doctrine-bundle ###
-  database_api:
-    image: postgres:${POSTGRES_VERSION:-16}-alpine
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_USER: ${POSTGRES_USER}
-    ports:
-      - "5434:${POSTGRES_PORT}"
-    healthcheck:
-      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}"]
-      timeout: 5s
-      retries: 5
-      start_period: 60s
-    volumes:
-      - database_api_data:/var/lib/postgresql/data:rw
-    networks:
-      - sanctuary_network
-    ###< doctrine/doctrine-bundle ###
-
   nginx:
     image: nginx:1.15.8-alpine
     ports:
@@ -52,7 +31,7 @@ services:
       - sanctuary_network
 
 volumes:
-  database_api_data:
+  database_data:
 
 networks:
   sanctuary_network:
