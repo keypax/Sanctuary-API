@@ -12,8 +12,8 @@ readonly class AnimalRepository implements AnimalRepositoryInterface
         animal.id AS animal_id,
         animal.animal_internal_id AS animal_internal_id,
         animal.animal_name AS animal_name,
-        animal.species AS animal_species,
-        animal.breed AS animal_breed,
+        animal.species_id AS animal_species_id,
+        animal.breed_id AS animal_breed_id,
         animal.gender AS animal_gender,
         animal.enclosure_id AS animal_enclosure_id,
         animal.birth_date AS animal_birth_date,
@@ -67,16 +67,12 @@ readonly class AnimalRepository implements AnimalRepositoryInterface
     public function findBySpeciesId(int $speciesId)
     {
         $subQuery = $this->connection->createQueryBuilder();
-        $subQuery->select('as_sub.species_name')
-            ->from('animal_species', 'as_sub')
-            ->where('as_sub.id = :speciesId')
-            ->setMaxResults(1);
 
         $qb = $this->connection->createQueryBuilder();
         $qb->select(self::FIELDS, self::FIELD_PHOTOS)
             ->from('animal')
             ->leftJoin('animal', 'public.animal_photo', 'animal_photo', 'animal.id = animal_photo.animal_id')
-            ->where('animal.species = (' . $subQuery->getSQL() . ')')
+            ->where('animal.species_id = :speciesId')
             ->setParameter('speciesId', $speciesId);
 
         $results = $qb->executeQuery()->fetchAllAssociative();
@@ -87,16 +83,11 @@ readonly class AnimalRepository implements AnimalRepositoryInterface
     public function findByBreedId(int $breedId)
     {
         $subQuery = $this->connection->createQueryBuilder();
-        $subQuery->select('ab_sub.breed_name')
-            ->from('animal_breed', 'ab_sub')
-            ->where('ab_sub.id = :breedId')
-            ->setMaxResults(1);
-
         $qb = $this->connection->createQueryBuilder();
         $qb->select(self::FIELDS, self::FIELD_PHOTOS)
             ->from('animal')
             ->leftJoin('animal', 'public.animal_photo', 'animal_photo', 'animal.id = animal_photo.animal_id')
-            ->where('animal.breed = (' . $subQuery->getSQL() . ')')
+            ->where('animal.breed_id = :breedId')
             ->setParameter('breedId', $breedId);
 
         $results = $qb->executeQuery()->fetchAllAssociative();

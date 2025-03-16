@@ -13,8 +13,8 @@ RUN apk add --no-cache --update \
     linux-headers \
   && docker-php-ext-install intl pdo_pgsql zip opcache
 
-RUN pecl install xdebug \
-  && docker-php-ext-enable xdebug
+RUN pecl install xdebug
+COPY docker/php/conf.d/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 RUN pecl install redis \
   && docker-php-ext-enable redis
