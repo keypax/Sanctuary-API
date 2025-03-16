@@ -36,10 +36,12 @@ Build and start the application:
 make build
 make start
 make composer-install
-make create-db
-make create-schema
-make create-subscription
 ```
+On **main** repo you should exectute:
+```
+make create-db-sanctuary-api-user
+```
+
 
 Once the setup is complete, visit: [http://localhost:8100/api/doc](http://localhost:8100/api/doc)
 
