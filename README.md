@@ -12,7 +12,8 @@ Sanctuary is an animal management system designed for use in animal shelters. Al
 - Sanctuary needs to be running during installation.
 
 ## Database
-Currently, this repository (subscriber) uses logical replication from the PostgreSQL database within the Sanctuary container (publisher). This is intended to prevent API abuse, ensuring that it does not affect the main database and that shelter management functions continue to operate. The replication also sends changes only from a few tables, which means that this repository does not have access to sensitive data, such as user information.
+~~Currently, this repository (subscriber) uses logical replication from the PostgreSQL database within the Sanctuary container (publisher). This is intended to prevent API abuse, ensuring that it does not affect the main database and that shelter management functions continue to operate. The replication also sends changes only from a few tables, which means that this repository does not have access to sensitive data, such as user information.~~
+Main database has seperate user with access to few tables with SELECT only permission.
 
 ## Installation
 
