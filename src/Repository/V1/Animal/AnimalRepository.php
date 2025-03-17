@@ -5,8 +5,9 @@ namespace App\Repository\V1\Animal;
 use App\DTO\V1\AnimalDTO;
 use App\DTO\V1\AnimalPhotoDTO;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 
-readonly class AnimalRepository implements AnimalRepositoryInterface
+class AnimalRepository implements AnimalRepositoryInterface
 {
     private const FIELDS = '
         animal.id AS animal_id,
@@ -36,14 +37,27 @@ readonly class AnimalRepository implements AnimalRepositoryInterface
         animal_photo.height AS animal_photo_height
     ';
 
-    public function __construct(private Connection $connection) {}
+    private const FIELD_SPECIES = '
+        animal_species.species_name AS animal_species_name
+    ';
+
+    private const FIELD_BREED = '
+        animal_breed.breed_name AS animal_breed_name
+    ';
+
+    private const FIELD_ENCLOSURE = '
+        enclosure.enclosure_name AS animal_enclosure_name
+    ';
+
+    private string $allFields;
+
+    public function __construct(private Connection $connection) {
+        $this->allFields = implode(',', [self::FIELDS, self::FIELD_PHOTOS, self::FIELD_SPECIES, self::FIELD_BREED, self::FIELD_ENCLOSURE]);
+    }
 
     public function getAll(): array
     {
-        $qb = $this->connection->createQueryBuilder();
-        $qb->select(self::FIELDS, self::FIELD_PHOTOS)
-            ->from('animal')
-            ->leftJoin('animal', 'public.animal_photo', 'animal_photo', 'animal.id = animal_photo.animal_id');
+        $qb = $this->returnBaseQueryBuilder();
 
         $results = $qb->executeQuery()->fetchAllAssociative();
 
@@ -52,10 +66,7 @@ readonly class AnimalRepository implements AnimalRepositoryInterface
 
     public function findByEnclosureId(int $enclosureId): array
     {
-        $qb = $this->connection->createQueryBuilder();
-        $qb->select(self::FIELDS, self::FIELD_PHOTOS)
-            ->from('animal')
-            ->leftJoin('animal', 'public.animal_photo', 'animal_photo', 'animal.id = animal_photo.animal_id')
+        $qb = $this->returnBaseQueryBuilder()
             ->where('animal.enclosure_id = :enclosureId')
             ->setParameter('enclosureId', $enclosureId);
 
@@ -66,12 +77,7 @@ readonly class AnimalRepository implements AnimalRepositoryInterface
 
     public function findBySpeciesId(int $speciesId)
     {
-        $subQuery = $this->connection->createQueryBuilder();
-
-        $qb = $this->connection->createQueryBuilder();
-        $qb->select(self::FIELDS, self::FIELD_PHOTOS)
-            ->from('animal')
-            ->leftJoin('animal', 'public.animal_photo', 'animal_photo', 'animal.id = animal_photo.animal_id')
+        $qb = $this->returnBaseQueryBuilder()
             ->where('animal.species_id = :speciesId')
             ->setParameter('speciesId', $speciesId);
 
@@ -82,17 +88,24 @@ readonly class AnimalRepository implements AnimalRepositoryInterface
 
     public function findByBreedId(int $breedId)
     {
-        $subQuery = $this->connection->createQueryBuilder();
-        $qb = $this->connection->createQueryBuilder();
-        $qb->select(self::FIELDS, self::FIELD_PHOTOS)
-            ->from('animal')
-            ->leftJoin('animal', 'public.animal_photo', 'animal_photo', 'animal.id = animal_photo.animal_id')
+        $qb = $this->returnBaseQueryBuilder()
             ->where('animal.breed_id = :breedId')
             ->setParameter('breedId', $breedId);
 
         $results = $qb->executeQuery()->fetchAllAssociative();
 
         return $this->mapResultsToDTOs($results);
+    }
+
+    private function returnBaseQueryBuilder(): QueryBuilder
+    {
+        return $this->connection->createQueryBuilder()
+            ->select($this->allFields)
+            ->from('animal')
+            ->leftJoin('animal', 'public.animal_photo', 'animal_photo', 'animal.id = animal_photo.animal_id')
+            ->leftJoin('animal', 'public.animal_species', 'animal_species', 'animal.species_id = animal_species.id')
+            ->leftJoin('animal', 'public.animal_breed', 'animal_breed', 'animal.breed_id = animal_breed.id')
+            ->leftJoin('animal', 'public.enclosure', 'enclosure', 'animal.enclosure_id = enclosure.id');
     }
 
     private function mapResultsToDTOs(array $results): array
